@@ -30,29 +30,6 @@ function Home() {
     loadEvents();
   }, []);
 
-  if (loading) {
-    return (
-      <main className="state-page">
-        <div className="loader"></div>
-        <h2>Finding great events...</h2>
-      </main>
-    );
-  }
-
-  if (error) {
-    return (
-      <main className="state-page">
-        <p className="eyebrow">CONNECTION ERROR</p>
-        <h1>Couldn't load events.</h1>
-        <p>Something went wrong while contacting the server.</p>
-
-        <button onClick={loadEvents} className="primary-button">
-          Try Again
-        </button>
-      </main>
-    );
-  }
-
   return (
     <>
       <header className="navbar">
@@ -66,6 +43,7 @@ function Home() {
       </header>
 
       <main>
+        {/* HERO RENDERS IMMEDIATELY */}
         <section className="hero">
           <div className="hero-content">
             <p className="eyebrow">EVENTS • IDEAS • EXPERIENCES</p>
@@ -94,10 +72,26 @@ function Home() {
               <h2>Upcoming events</h2>
             </div>
 
-            <p>{events.length} events</p>
+            {!loading && !error && <p>{events.length} events</p>}
           </div>
 
-          {events.length === 0 ? (
+          {/* LOADING ONLY INSIDE EVENTS SECTION */}
+          {loading ? (
+            <div className="events-loading">
+              <div className="loader"></div>
+              <p>Finding great events...</p>
+            </div>
+          ) : error ? (
+            <div className="empty-state">
+              <p className="eyebrow">CONNECTION ERROR</p>
+              <h3>Couldn't load events.</h3>
+              <p>Something went wrong while contacting the server.</p>
+
+              <button onClick={loadEvents} className="primary-button">
+                Try Again
+              </button>
+            </div>
+          ) : events.length === 0 ? (
             <div className="empty-state">
               <h3>No events available right now.</h3>
               <p>Check back soon for new experiences.</p>
@@ -116,6 +110,7 @@ function Home() {
                         src={event.cover_image_url}
                         alt={event.cover_image_alt || event.name}
                         loading="lazy"
+                        decoding="async"
                       />
                     ) : (
                       <div className="image-placeholder">EVENT</div>

@@ -9,6 +9,9 @@ function EventDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Custom registration modal
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+
   // ==============================
   // LOAD EVENT
   // ==============================
@@ -19,9 +22,6 @@ function EventDetail() {
 
     try {
       const data = await getEventById(id);
-
-      // API may return { event: {...} }
-      // or directly the event object
       setEvent(data.event || data);
     } catch (err) {
       console.error(err);
@@ -39,6 +39,21 @@ function EventDetail() {
   useEffect(() => {
     loadEvent();
   }, [id]);
+
+  // Close modal using ESC key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === "Escape") {
+        setShowRegisterModal(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
 
   // ==============================
   // LOADING
@@ -64,9 +79,7 @@ function EventDetail() {
 
         <h1>Event not found.</h1>
 
-        <p>
-          The event you're looking for doesn't seem to exist.
-        </p>
+        <p>The event you're looking for doesn't seem to exist.</p>
 
         <Link to="/" className="primary-button">
           Back home
@@ -86,14 +99,9 @@ function EventDetail() {
 
         <h1>Couldn't load this event.</h1>
 
-        <p>
-          Please check your connection and try again.
-        </p>
+        <p>Please check your connection and try again.</p>
 
-        <button
-          onClick={loadEvent}
-          className="primary-button"
-        >
+        <button onClick={loadEvent} className="primary-button">
           Try Again
         </button>
       </main>
@@ -105,26 +113,18 @@ function EventDetail() {
   // ==============================
 
   const seatsLeft =
-    event.total_seats != null &&
-    event.seats_filled != null
-      ? Math.max(
-          event.total_seats - event.seats_filled,
-          0
-        )
+    event.total_seats != null && event.seats_filled != null
+      ? Math.max(event.total_seats - event.seats_filled, 0)
       : null;
 
   // ==============================
-  // REGISTER BUTTON
+  // REGISTER
   // ==============================
 
   const handleRegister = () => {
-    if (event.registration_status !== "OPEN") {
-      return;
+    if (event.registration_status === "OPEN") {
+      setShowRegisterModal(true);
     }
-
-    alert(
-      `Registration is open for ${event.name}!\n\nPlease contact the event organizer to complete registration.`
-    );
   };
 
   // ==============================
@@ -146,19 +146,16 @@ function EventDetail() {
       </header>
 
       <main className="detail-page">
-
         {/* ==============================
             HERO
         ============================== */}
 
         <section className="detail-hero">
-
           <div>
             <p className="eyebrow">
               {event.category || "EVENT"}
 
-              {event.event_mode &&
-                ` • ${event.event_mode}`}
+              {event.event_mode && ` • ${event.event_mode}`}
             </p>
 
             <h1>{event.name}</h1>
@@ -187,30 +184,25 @@ function EventDetail() {
           ============================== */}
 
           <div className="registration-card">
-
             <p>REGISTRATION</p>
 
             <h2>
               {event.price === 0
                 ? "FREE"
                 : event.price != null
-                  ? `₹${Number(
-                      event.price
-                    ).toLocaleString("en-IN")}`
+                  ? `₹${Number(event.price).toLocaleString("en-IN")}`
                   : "EVENT"}
             </h2>
 
             {/* PRICE TYPE */}
 
-            {event.is_per_head === false &&
-              event.price > 0 && (
-                <small>per team</small>
-              )}
+            {event.is_per_head === false && event.price > 0 && (
+              <small>per team</small>
+            )}
 
-            {event.is_per_head === true &&
-              event.price > 0 && (
-                <small>per person</small>
-              )}
+            {event.is_per_head === true && event.price > 0 && (
+              <small>per person</small>
+            )}
 
             {/* SEATS */}
 
@@ -227,45 +219,34 @@ function EventDetail() {
             <button
               type="button"
               className="primary-button register-button"
-              disabled={
-                event.registration_status !== "OPEN"
-              }
+              disabled={event.registration_status !== "OPEN"}
               onClick={handleRegister}
             >
               {event.registration_status === "OPEN"
                 ? "Register now →"
-                : event.registration_status ===
-                    "SOLD_OUT"
+                : event.registration_status === "SOLD_OUT"
                   ? "SOLD OUT"
-                  : event.registration_status ===
-                      "CLOSED"
+                  : event.registration_status === "CLOSED"
                     ? "CLOSED"
                     : "Unavailable"}
             </button>
-
           </div>
         </section>
 
         {/* ==============================
-            BANNER IMAGE
+            BANNER
         ============================== */}
 
-        {(event.banner_image_url ||
-          event.cover_image_url) && (
+        {(event.banner_image_url || event.cover_image_url) && (
           <div className="banner-wrapper">
-
             <img
-              src={
-                event.banner_image_url ||
-                event.cover_image_url
-              }
+              src={event.banner_image_url || event.cover_image_url}
               alt={
                 event.banner_image_alt ||
                 event.cover_image_alt ||
                 event.name
               }
             />
-
           </div>
         )}
 
@@ -274,25 +255,17 @@ function EventDetail() {
         ============================== */}
 
         <div className="detail-content">
-
           {/* ABOUT */}
 
           {(event.description || event.blurb) && (
             <section>
+              <p className="eyebrow">ABOUT</p>
 
-              <p className="eyebrow">
-                ABOUT
-              </p>
-
-              <h2>
-                The experience.
-              </h2>
+              <h2>The experience.</h2>
 
               <p className="large-copy">
-                {event.description ||
-                  event.blurb}
+                {event.description || event.blurb}
               </p>
-
             </section>
           )}
 
@@ -302,42 +275,29 @@ function EventDetail() {
 
           {event.highlights?.length > 0 && (
             <section>
+              <p className="eyebrow">HIGHLIGHTS</p>
 
-              <p className="eyebrow">
-                HIGHLIGHTS
-              </p>
-
-              <h2>
-                Why show up?
-              </h2>
+              <h2>Why show up?</h2>
 
               <div className="highlight-grid">
+                {event.highlights.map((item, index) => (
+                  <div
+                    className="highlight-card"
+                    key={index}
+                  >
+                    <span>
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
 
-                {event.highlights.map(
-                  (item, index) => (
-                    <div
-                      className="highlight-card"
-                      key={index}
-                    >
-
-                      <span>
-                        {String(
-                          index + 1
-                        ).padStart(2, "0")}
-                      </span>
-
-                      <p>
-                        {typeof item === "string"
-                          ? item
-                          : item.title ||
-                            item.description ||
-                            ""}
-                      </p>
-
-                    </div>
-                  )
-                )}
-
+                    <p>
+                      {typeof item === "string"
+                        ? item
+                        : item.title ||
+                          item.description ||
+                          ""}
+                    </p>
+                  </div>
+                ))}
               </div>
             </section>
           )}
@@ -346,25 +306,19 @@ function EventDetail() {
               WHAT TO EXPECT
           ============================== */}
 
-          {event.what_to_expect?.length >
-            0 && (
+          {event.what_to_expect?.length > 0 && (
             <section>
-
               <p className="eyebrow">
                 WHAT TO EXPECT
               </p>
 
-              <h2>
-                Come ready.
-              </h2>
+              <h2>Come ready.</h2>
 
               <ul className="clean-list">
-
                 {event.what_to_expect.map(
                   (item, index) => (
                     <li key={index}>
-                      {typeof item ===
-                      "string"
+                      {typeof item === "string"
                         ? item
                         : item.title ||
                           item.description ||
@@ -372,9 +326,7 @@ function EventDetail() {
                     </li>
                   )
                 )}
-
               </ul>
-
             </section>
           )}
 
@@ -384,30 +336,23 @@ function EventDetail() {
 
           {event.schedules?.length > 0 && (
             <section>
-
               <p className="eyebrow">
                 SCHEDULE
               </p>
 
-              <h2>
-                When & where.
-              </h2>
+              <h2>When & where.</h2>
 
               <div className="schedule-list">
-
                 {event.schedules.map(
                   (schedule, index) => (
                     <div
                       className="schedule-item"
                       key={index}
                     >
-
                       <strong>
                         {schedule.title ||
                           schedule.name ||
-                          `Session ${
-                            index + 1
-                          }`}
+                          `Session ${index + 1}`}
                       </strong>
 
                       <p>
@@ -416,13 +361,10 @@ function EventDetail() {
                           schedule.description ||
                           ""}
                       </p>
-
                     </div>
                   )
                 )}
-
               </div>
-
             </section>
           )}
 
@@ -432,7 +374,6 @@ function EventDetail() {
 
           {event.prizes?.length > 0 && (
             <section className="prize-section">
-
               <p className="eyebrow">
                 PRIZES
               </p>
@@ -442,11 +383,9 @@ function EventDetail() {
               </h2>
 
               <div className="prize-grid">
-
                 {event.prizes.map(
                   (prize, index) => (
                     <div key={index}>
-
                       <span>
                         {prize.title ||
                           prize.name ||
@@ -463,13 +402,10 @@ function EventDetail() {
                           : prize.description ||
                             ""}
                       </strong>
-
                     </div>
                   )
                 )}
-
               </div>
-
             </section>
           )}
 
@@ -479,22 +415,17 @@ function EventDetail() {
 
           {event.eligibility?.length > 0 && (
             <section>
-
               <p className="eyebrow">
                 BEFORE YOU APPLY
               </p>
 
-              <h2>
-                Eligibility.
-              </h2>
+              <h2>Eligibility.</h2>
 
               <ul className="clean-list">
-
                 {event.eligibility.map(
                   (item, index) => (
                     <li key={index}>
-                      {typeof item ===
-                      "string"
+                      {typeof item === "string"
                         ? item
                         : item.title ||
                           item.description ||
@@ -502,26 +433,19 @@ function EventDetail() {
                     </li>
                   )
                 )}
-
               </ul>
 
               {(event.min_teamsize ||
                 event.max_teamsize) && (
                 <p className="team-size">
-
                   Team size:{" "}
-
                   {event.min_teamsize || 1}
-
                   {" – "}
-
                   {event.max_teamsize ||
                     event.min_teamsize ||
                     1}
-
                 </p>
               )}
-
             </section>
           )}
 
@@ -531,7 +455,6 @@ function EventDetail() {
 
           {event.faqs?.length > 0 && (
             <section>
-
               <p className="eyebrow">
                 FAQ
               </p>
@@ -541,46 +464,141 @@ function EventDetail() {
               </h2>
 
               <div className="faq-list">
-
                 {event.faqs.map(
                   (faq, index) => (
                     <details key={index}>
-
                       <summary>
                         {faq.question ||
-                          `Question ${
-                            index + 1
-                          }`}
+                          `Question ${index + 1}`}
                       </summary>
 
                       <p>
                         {faq.answer ||
                           "Information not available."}
                       </p>
-
                     </details>
                   )
                 )}
-
               </div>
-
             </section>
           )}
-
         </div>
       </main>
 
-      {/* ==============================
-          FOOTER
-      ============================== */}
+      {/* FOOTER */}
 
       <footer>
         <strong>PULSE.</strong>
-
-        <p>
-          Find your next experience.
-        </p>
+        <p>Find your next experience.</p>
       </footer>
+
+      {/* ==================================
+          CUSTOM NEON REGISTRATION MODAL
+      ================================== */}
+
+      {showRegisterModal && (
+        <div
+          className="modal-overlay"
+          onClick={() =>
+            setShowRegisterModal(false)
+          }
+        >
+          <div
+            className="neon-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="register-modal-title"
+            onClick={(e) =>
+              e.stopPropagation()
+            }
+          >
+            {/* CLOSE */}
+
+            <button
+              type="button"
+              className="modal-close"
+              onClick={() =>
+                setShowRegisterModal(false)
+              }
+              aria-label="Close registration message"
+            >
+              ×
+            </button>
+
+            {/* ANIMATED ICON */}
+
+            <div className="modal-icon">
+              <span>✓</span>
+            </div>
+
+            <p className="modal-label">
+              PULSE ACCESS
+            </p>
+
+            <h2 id="register-modal-title">
+              You're good to go.
+            </h2>
+
+            <p className="modal-event-name">
+              {event.name}
+            </p>
+
+            <p className="modal-description">
+              Registration is currently open
+              for this event. Continue with the
+              event organizer to secure your
+              spot.
+            </p>
+
+            {/* LIVE SEAT INFORMATION */}
+
+            {seatsLeft !== null && (
+              <div className="modal-seat-info">
+                <span className="live-dot"></span>
+
+                <span>
+                  {seatsLeft > 0
+                    ? `${seatsLeft} seats currently remaining`
+                    : "Limited availability"}
+                </span>
+              </div>
+            )}
+
+            {/* TEAM INFORMATION */}
+
+            {(event.min_teamsize ||
+              event.max_teamsize) && (
+              <div className="modal-meta">
+                <span>TEAM SIZE</span>
+
+                <strong>
+                  {event.min_teamsize || 1}
+                  {" – "}
+                  {event.max_teamsize ||
+                    event.min_teamsize ||
+                    1}
+                </strong>
+              </div>
+            )}
+
+            <button
+              type="button"
+              className="modal-button"
+              onClick={() =>
+                setShowRegisterModal(false)
+              }
+            >
+              GOT IT →
+            </button>
+
+            {/* DECORATIVE NEON PARTICLES */}
+
+            <div className="modal-decoration modal-decoration-one"></div>
+            <div className="modal-decoration modal-decoration-two"></div>
+            <div className="modal-decoration modal-decoration-three"></div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

@@ -11,6 +11,16 @@ function EventDetail() {
 
   // Custom registration modal
   const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [registered, setRegistered] = useState(false);
+
+  // Read saved registration status for this event
+  useEffect(() => {
+    try {
+      setRegistered(localStorage.getItem(`registered:${id}`) === "true");
+    } catch {
+      setRegistered(false);
+    }
+  }, [id]);
 
   // ==============================
   // LOAD EVENT
@@ -122,9 +132,16 @@ function EventDetail() {
   // ==============================
 
   const handleRegister = () => {
-    if (event.registration_status === "OPEN") {
-      setShowRegisterModal(true);
+    if (event.registration_status !== "OPEN" || registered) return;
+
+    try {
+      localStorage.setItem(`registered:${id}`, "true");
+    } catch {
+      /* storage unavailable, state still updates below */
     }
+
+    setRegistered(true);
+    setShowRegisterModal(true);
   };
 
   // ==============================
@@ -161,9 +178,7 @@ function EventDetail() {
             <h1>{event.name}</h1>
 
             {event.blurb && (
-              <p className="detail-blurb">
-                {event.blurb}
-              </p>
+              <p className="detail-blurb">{event.blurb}</p>
             )}
 
             {/* TAGS */}
@@ -171,9 +186,7 @@ function EventDetail() {
             {event.tags?.length > 0 && (
               <div className="event-tags">
                 {event.tags.map((tag, index) => (
-                  <span key={`${tag}-${index}`}>
-                    {tag}
-                  </span>
+                  <span key={`${tag}-${index}`}>{tag}</span>
                 ))}
               </div>
             )}
@@ -218,17 +231,21 @@ function EventDetail() {
 
             <button
               type="button"
-              className="primary-button register-button"
-              disabled={event.registration_status !== "OPEN"}
+              className={`primary-button register-button ${
+                registered ? "registered" : ""
+              }`}
+              disabled={registered || event.registration_status !== "OPEN"}
               onClick={handleRegister}
             >
-              {event.registration_status === "OPEN"
-                ? "Register now →"
-                : event.registration_status === "SOLD_OUT"
-                  ? "SOLD OUT"
-                  : event.registration_status === "CLOSED"
-                    ? "CLOSED"
-                    : "Unavailable"}
+              {registered
+                ? "✓ Registered"
+                : event.registration_status === "OPEN"
+                  ? "Register now →"
+                  : event.registration_status === "SOLD_OUT"
+                    ? "SOLD OUT"
+                    : event.registration_status === "CLOSED"
+                      ? "CLOSED"
+                      : "Unavailable"}
             </button>
           </div>
         </section>
@@ -269,9 +286,7 @@ function EventDetail() {
             </section>
           )}
 
-          {/* ==============================
-              HIGHLIGHTS
-          ============================== */}
+          {/* HIGHLIGHTS */}
 
           {event.highlights?.length > 0 && (
             <section>
@@ -281,20 +296,13 @@ function EventDetail() {
 
               <div className="highlight-grid">
                 {event.highlights.map((item, index) => (
-                  <div
-                    className="highlight-card"
-                    key={index}
-                  >
-                    <span>
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
+                  <div className="highlight-card" key={index}>
+                    <span>{String(index + 1).padStart(2, "0")}</span>
 
                     <p>
                       {typeof item === "string"
                         ? item
-                        : item.title ||
-                          item.description ||
-                          ""}
+                        : item.title || item.description || ""}
                     </p>
                   </div>
                 ))}
@@ -302,183 +310,125 @@ function EventDetail() {
             </section>
           )}
 
-          {/* ==============================
-              WHAT TO EXPECT
-          ============================== */}
+          {/* WHAT TO EXPECT */}
 
           {event.what_to_expect?.length > 0 && (
             <section>
-              <p className="eyebrow">
-                WHAT TO EXPECT
-              </p>
+              <p className="eyebrow">WHAT TO EXPECT</p>
 
               <h2>Come ready.</h2>
 
               <ul className="clean-list">
-                {event.what_to_expect.map(
-                  (item, index) => (
-                    <li key={index}>
-                      {typeof item === "string"
-                        ? item
-                        : item.title ||
-                          item.description ||
-                          ""}
-                    </li>
-                  )
-                )}
+                {event.what_to_expect.map((item, index) => (
+                  <li key={index}>
+                    {typeof item === "string"
+                      ? item
+                      : item.title || item.description || ""}
+                  </li>
+                ))}
               </ul>
             </section>
           )}
 
-          {/* ==============================
-              SCHEDULE
-          ============================== */}
+          {/* SCHEDULE */}
 
           {event.schedules?.length > 0 && (
             <section>
-              <p className="eyebrow">
-                SCHEDULE
-              </p>
+              <p className="eyebrow">SCHEDULE</p>
 
               <h2>When & where.</h2>
 
               <div className="schedule-list">
-                {event.schedules.map(
-                  (schedule, index) => (
-                    <div
-                      className="schedule-item"
-                      key={index}
-                    >
-                      <strong>
-                        {schedule.title ||
-                          schedule.name ||
-                          `Session ${index + 1}`}
-                      </strong>
+                {event.schedules.map((schedule, index) => (
+                  <div className="schedule-item" key={index}>
+                    <strong>
+                      {schedule.title ||
+                        schedule.name ||
+                        `Session ${index + 1}`}
+                    </strong>
 
-                      <p>
-                        {schedule.venue ||
-                          schedule.location ||
-                          schedule.description ||
-                          ""}
-                      </p>
-                    </div>
-                  )
-                )}
+                    <p>
+                      {schedule.venue ||
+                        schedule.location ||
+                        schedule.description ||
+                        ""}
+                    </p>
+                  </div>
+                ))}
               </div>
             </section>
           )}
 
-          {/* ==============================
-              PRIZES
-          ============================== */}
+          {/* PRIZES */}
 
           {event.prizes?.length > 0 && (
             <section className="prize-section">
-              <p className="eyebrow">
-                PRIZES
-              </p>
+              <p className="eyebrow">PRIZES</p>
 
-              <h2>
-                Build something that matters.
-              </h2>
+              <h2>Build something that matters.</h2>
 
               <div className="prize-grid">
-                {event.prizes.map(
-                  (prize, index) => (
-                    <div key={index}>
-                      <span>
-                        {prize.title ||
-                          prize.name ||
-                          "Prize"}
-                      </span>
+                {event.prizes.map((prize, index) => (
+                  <div key={index}>
+                    <span>{prize.title || prize.name || "Prize"}</span>
 
-                      <strong>
-                        {prize.amount != null
-                          ? `₹${Number(
-                              prize.amount
-                            ).toLocaleString(
-                              "en-IN"
-                            )}`
-                          : prize.description ||
-                            ""}
-                      </strong>
-                    </div>
-                  )
-                )}
+                    <strong>
+                      {prize.amount != null
+                        ? `₹${Number(prize.amount).toLocaleString("en-IN")}`
+                        : prize.description || ""}
+                    </strong>
+                  </div>
+                ))}
               </div>
             </section>
           )}
 
-          {/* ==============================
-              ELIGIBILITY
-          ============================== */}
+          {/* ELIGIBILITY */}
 
           {event.eligibility?.length > 0 && (
             <section>
-              <p className="eyebrow">
-                BEFORE YOU APPLY
-              </p>
+              <p className="eyebrow">BEFORE YOU APPLY</p>
 
               <h2>Eligibility.</h2>
 
               <ul className="clean-list">
-                {event.eligibility.map(
-                  (item, index) => (
-                    <li key={index}>
-                      {typeof item === "string"
-                        ? item
-                        : item.title ||
-                          item.description ||
-                          ""}
-                    </li>
-                  )
-                )}
+                {event.eligibility.map((item, index) => (
+                  <li key={index}>
+                    {typeof item === "string"
+                      ? item
+                      : item.title || item.description || ""}
+                  </li>
+                ))}
               </ul>
 
-              {(event.min_teamsize ||
-                event.max_teamsize) && (
+              {(event.min_teamsize || event.max_teamsize) && (
                 <p className="team-size">
-                  Team size:{" "}
-                  {event.min_teamsize || 1}
+                  Team size: {event.min_teamsize || 1}
                   {" – "}
-                  {event.max_teamsize ||
-                    event.min_teamsize ||
-                    1}
+                  {event.max_teamsize || event.min_teamsize || 1}
                 </p>
               )}
             </section>
           )}
 
-          {/* ==============================
-              FAQ
-          ============================== */}
+          {/* FAQ */}
 
           {event.faqs?.length > 0 && (
             <section>
-              <p className="eyebrow">
-                FAQ
-              </p>
+              <p className="eyebrow">FAQ</p>
 
-              <h2>
-                Questions, answered.
-              </h2>
+              <h2>Questions, answered.</h2>
 
               <div className="faq-list">
-                {event.faqs.map(
-                  (faq, index) => (
-                    <details key={index}>
-                      <summary>
-                        {faq.question ||
-                          `Question ${index + 1}`}
-                      </summary>
+                {event.faqs.map((faq, index) => (
+                  <details key={index}>
+                    <summary>
+                      {faq.question || `Question ${index + 1}`}
+                    </summary>
 
-                      <p>
-                        {faq.answer ||
-                          "Information not available."}
-                      </p>
-                    </details>
-                  )
-                )}
+                    <p>{faq.answer || "Information not available."}</p>
+                  </details>
+                ))}
               </div>
             </section>
           )}
@@ -493,64 +443,44 @@ function EventDetail() {
       </footer>
 
       {/* ==================================
-          CUSTOM NEON REGISTRATION MODAL
+          REGISTRATION MODAL
       ================================== */}
 
       {showRegisterModal && (
         <div
           className="modal-overlay"
-          onClick={() =>
-            setShowRegisterModal(false)
-          }
+          onClick={() => setShowRegisterModal(false)}
         >
           <div
             className="neon-modal"
             role="dialog"
             aria-modal="true"
             aria-labelledby="register-modal-title"
-            onClick={(e) =>
-              e.stopPropagation()
-            }
+            onClick={(e) => e.stopPropagation()}
           >
-            {/* CLOSE */}
-
             <button
               type="button"
               className="modal-close"
-              onClick={() =>
-                setShowRegisterModal(false)
-              }
+              onClick={() => setShowRegisterModal(false)}
               aria-label="Close registration message"
             >
               ×
             </button>
 
-            {/* ANIMATED ICON */}
-
             <div className="modal-icon">
               <span>✓</span>
             </div>
 
-            <p className="modal-label">
-              PULSE ACCESS
-            </p>
+            <p className="modal-label">PULSE ACCESS</p>
 
-            <h2 id="register-modal-title">
-              You're good to go.
-            </h2>
+            <h2 id="register-modal-title">You're registered!</h2>
 
-            <p className="modal-event-name">
-              {event.name}
-            </p>
+            <p className="modal-event-name">{event.name}</p>
 
             <p className="modal-description">
-              Registration is currently open
-              for this event. Continue with the
-              event organizer to secure your
-              spot.
+              Your spot for this event is saved. You'll see "Registered"
+              whenever you come back to this page on this device.
             </p>
-
-            {/* LIVE SEAT INFORMATION */}
 
             {seatsLeft !== null && (
               <div className="modal-seat-info">
@@ -564,19 +494,14 @@ function EventDetail() {
               </div>
             )}
 
-            {/* TEAM INFORMATION */}
-
-            {(event.min_teamsize ||
-              event.max_teamsize) && (
+            {(event.min_teamsize || event.max_teamsize) && (
               <div className="modal-meta">
                 <span>TEAM SIZE</span>
 
                 <strong>
                   {event.min_teamsize || 1}
                   {" – "}
-                  {event.max_teamsize ||
-                    event.min_teamsize ||
-                    1}
+                  {event.max_teamsize || event.min_teamsize || 1}
                 </strong>
               </div>
             )}
@@ -584,14 +509,10 @@ function EventDetail() {
             <button
               type="button"
               className="modal-button"
-              onClick={() =>
-                setShowRegisterModal(false)
-              }
+              onClick={() => setShowRegisterModal(false)}
             >
               GOT IT →
             </button>
-
-            {/* DECORATIVE NEON PARTICLES */}
 
             <div className="modal-decoration modal-decoration-one"></div>
             <div className="modal-decoration modal-decoration-two"></div>

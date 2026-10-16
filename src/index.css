@@ -2303,3 +2303,11 @@ footer p {
 footer p {
   color: #b5b5b5;
 }
+
+.register-button.registered:disabled {
+  background: transparent;
+  color: #c8ff00;
+  border: 2px solid currentColor;
+  opacity: 1;
+  cursor: default;
+}

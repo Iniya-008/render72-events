@@ -2224,3 +2224,61 @@ footer p {
     animation: none !important;
   }
 }
+
+/* =========================================================
+   MOBILE PERFORMANCE OPTIMIZATION
+   Keeps full neon experience on desktop
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  /* Remove expensive large blurred animated lights on mobile */
+  .hero::before,
+  .hero::after {
+    animation: none;
+    filter: none;
+  }
+
+  .hero::before {
+    width: 280px;
+    height: 280px;
+    opacity: 0.35;
+    background: radial-gradient(
+      circle,
+      rgba(157, 92, 255, 0.18),
+      rgba(57, 246, 255, 0.05) 45%,
+      transparent 70%
+    );
+  }
+
+  .hero::after {
+    width: 220px;
+    height: 220px;
+    opacity: 0.04;
+  }
+
+  /* Keep entrance animation but stop continuous neon animation */
+  .hero h1 span,
+  .logo span,
+  .status {
+    animation: none;
+  }
+
+  /* Don't animate every card while Lighthouse is rendering */
+  .event-card {
+    animation: none;
+  }
+
+  /* Backdrop blur is relatively expensive on slower phones */
+  .navbar {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(5, 5, 5, 0.96);
+  }
+
+  /* Render below-the-fold event content only when needed */
+  .events-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 1000px;
+  }
+}

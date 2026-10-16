@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
 
 :root {
   font-family: "DM Sans", sans-serif;
@@ -2294,4 +2294,12 @@ footer p {
 
 .events-loading .loader {
   margin-bottom: 18px;
+}
+
+.eyebrow,
+.hero-description,
+.event-meta,
+.event-info p,
+footer p {
+  color: #b5b5b5;
 }

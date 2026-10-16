@@ -1,0 +1,1087 @@
+/* ================================
+   RENDER72 - PULSE
+   Main Stylesheet
+================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap");
+
+
+/* ================================
+   GLOBAL RESET
+================================ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+
+  background: #f5f2eb;
+  color: #111111;
+
+  font-family: "DM Sans", Arial, sans-serif;
+
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+
+/* ================================
+   NAVBAR
+================================ */
+
+.navbar {
+  width: 100%;
+  height: 76px;
+
+  padding: 0 6%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: rgba(245, 242, 235, 0.96);
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+  position: relative;
+  z-index: 100;
+}
+
+.logo {
+  font-family: "Space Grotesk", sans-serif;
+
+  font-size: 1.6rem;
+  font-weight: 700;
+
+  letter-spacing: -1px;
+}
+
+.logo span {
+  color: #ff4d00;
+}
+
+.nav-link {
+  font-size: 0.95rem;
+  font-weight: 600;
+
+  transition: opacity 0.2s ease;
+}
+
+.nav-link:hover {
+  opacity: 0.55;
+}
+
+
+/* ================================
+   EYEBROW TEXT
+================================ */
+
+.eyebrow {
+  margin-bottom: 18px;
+
+  color: #ff4d00;
+
+  font-size: 0.75rem;
+  font-weight: 700;
+
+  letter-spacing: 2px;
+
+  text-transform: uppercase;
+}
+
+
+/* ================================
+   HOME HERO
+================================ */
+
+.hero {
+  width: 100%;
+  min-height: 75vh;
+
+  padding: 90px 6%;
+
+  display: flex;
+  align-items: center;
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.hero-content {
+  width: 100%;
+  max-width: 1400px;
+
+  margin: 0 auto;
+}
+
+.hero h1 {
+  max-width: 1200px;
+
+  font-family: "Space Grotesk", sans-serif;
+
+  font-size: clamp(4rem, 9vw, 9rem);
+  font-weight: 700;
+
+  line-height: 0.84;
+
+  letter-spacing: -0.075em;
+
+  color: #111;
+}
+
+.hero h1 span {
+  color: #ff4d00;
+}
+
+.hero-description {
+  max-width: 570px;
+
+  margin: 40px 0 32px;
+
+  color: #575757;
+
+  font-size: 1.1rem;
+
+  line-height: 1.7;
+}
+
+
+/* ================================
+   BUTTON
+================================ */
+
+.primary-button {
+  display: inline-block;
+
+  padding: 15px 24px;
+
+  border: none;
+
+  background: #111111;
+  color: #ffffff;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.primary-button:hover {
+  background: #ff4d00;
+
+  transform: translateY(-2px);
+}
+
+
+/* ================================
+   EVENTS SECTION
+================================ */
+
+.events-section {
+  width: 100%;
+  max-width: 1500px;
+
+  margin: 0 auto;
+
+  padding: 100px 6%;
+}
+
+.section-heading {
+  margin-bottom: 45px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  gap: 30px;
+}
+
+.section-heading .eyebrow {
+  margin-bottom: 10px;
+}
+
+.section-heading h2 {
+  font-family: "Space Grotesk", sans-serif;
+
+  font-size: clamp(2.5rem, 4vw, 4.5rem);
+
+  line-height: 1;
+
+  letter-spacing: -0.055em;
+}
+
+.section-heading > p {
+  color: #777;
+}
+
+
+/* ================================
+   EVENT GRID
+================================ */
+
+.events-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 24px;
+}
+
+
+/* ================================
+   EVENT CARD
+================================ */
+
+.event-card {
+  min-width: 0;
+
+  background: #ffffff;
+
+  border: 1px solid rgba(0, 0, 0, 0.1);
+
+  overflow: hidden;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-6px);
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+}
+
+
+/* ================================
+   EVENT IMAGE
+================================ */
+
+.image-wrapper {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 4 / 3;
+
+  overflow: hidden;
+
+  background: #dedbd3;
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: transform 0.5s ease;
+}
+
+.event-card:hover .image-wrapper img {
+  transform: scale(1.035);
+}
+
+.image-placeholder {
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  place-items: center;
+
+  font-family: "Space Grotesk", sans-serif;
+
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+
+/* ================================
+   STATUS BADGE
+================================ */
+
+.status {
+  position: absolute;
+
+  top: 16px;
+  right: 16px;
+
+  padding: 8px 11px;
+
+  background: #dfff00;
+  color: #111;
+
+  font-size: 0.68rem;
+  font-weight: 800;
+
+  letter-spacing: 1px;
+}
+
+
+/* ================================
+   EVENT INFORMATION
+================================ */
+
+.event-info {
+  padding: 24px;
+}
+
+.event-meta {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  color: #ff4d00;
+
+  font-size: 0.72rem;
+  font-weight: 700;
+
+  letter-spacing: 0.7px;
+
+  text-transform: uppercase;
+}
+
+.event-info h3 {
+  margin: 16px 0 12px;
+
+  font-family: "Space Grotesk", sans-serif;
+
+  font-size: 1.6rem;
+
+  line-height: 1.08;
+
+  letter-spacing: -0.04em;
+}
+
+.event-info > p {
+  min-height: 75px;
+
+  color: #666;
+
+  line-height: 1.55;
+}
+
+.card-bottom {
+  margin-top: 25px;
+  padding-top: 18px;
+
+  border-top: 1px solid #ddd;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+}
+
+.card-bottom strong {
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.card-bottom span {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+
+/* ================================
+   EVENT DETAIL PAGE
+================================ */
+
+.detail-page {
+  width: 100%;
+}
+
+.detail-hero {
+  width: 100%;
+  max-width: 1500px;
+
+  margin: 0 auto;
+
+  padding: 80px 6% 60px;
+
+  display: grid;
+
+  grid-template-columns: minmax(0, 1fr) 330px;
+
+  gap: 70px;
+
+  align-items: end;
+}
+
+.detail-hero h1 {
+  max-width: 1000px;
+
+  font-family: "Space Grotesk", sans-serif;
+
+  font-size: clamp(3rem, 7vw, 7rem);
+
+  line-height: 0.92;
+
+  letter-spacing: -0.065em;
+}
+
+.detail-blurb {
+  max-width: 700px;
+
+  margin-top: 28px;
+
+  color: #555;
+
+  font-size: 1.1rem;
+
+  line-height: 1.7;
+}
+
+
+/* ================================
+   TAGS
+================================ */
+
+.event-tags {
+  margin-top: 25px;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 8px;
+}
+
+.event-tags span {
+  padding: 7px 11px;
+
+  border: 1px solid #aaa;
+
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+
+/* ================================
+   REGISTRATION CARD
+================================ */
+
+.registration-card {
+  padding: 30px;
+
+  background: #111;
+  color: #ffffff;
+}
+
+.registration-card > p:first-child {
+  color: #dfff00;
+
+  font-size: 0.72rem;
+  font-weight: 700;
+
+  letter-spacing: 1.5px;
+}
+
+.registration-card h2 {
+  margin-top: 15px;
+
+  font-family: "Space Grotesk", sans-serif;
+
+  font-size: 3rem;
+}
+
+.registration-card small {
+  color: #aaa;
+}
+
+.registration-card > p:not(:first-child) {
+  margin-top: 25px;
+
+  color: #ccc;
+}
+
+.register-button {
+  width: 100%;
+
+  margin-top: 20px;
+
+  background: #dfff00;
+  color: #111;
+}
+
+.register-button:hover {
+  background: #ffffff;
+}
+
+.register-button:disabled {
+  background: #555;
+  color: #aaa;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+
+/* ================================
+   BANNER
+================================ */
+
+.banner-wrapper {
+  width: min(88%, 1400px);
+
+  margin: 20px auto 100px;
+
+  aspect-ratio: 16 / 7;
+
+  overflow: hidden;
+
+  background: #ddd;
+}
+
+.banner-wrapper img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+
+/* ================================
+   DETAIL CONTENT
+================================ */
+
+.detail-content {
+  width: 100%;
+  max-width: 1100px;
+
+  margin: 0 auto;
+
+  padding: 0 6% 120px;
+}
+
+.detail-content section {
+  padding: 75px 0;
+
+  border-top: 1px solid #c9c6be;
+}
+
+.detail-content section:first-child {
+  border-top: none;
+}
+
+.detail-content h2 {
+  font-family: "Space Grotesk", sans-serif;
+
+  font-size: clamp(2.2rem, 4vw, 4rem);
+
+  line-height: 1;
+
+  letter-spacing: -0.055em;
+}
+
+.large-copy {
+  max-width: 900px;
+
+  margin-top: 30px;
+
+  color: #444;
+
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+
+  line-height: 1.7;
+}
+
+
+/* ================================
+   HIGHLIGHTS
+================================ */
+
+.highlight-grid {
+  margin-top: 40px;
+
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 15px;
+}
+
+.highlight-card {
+  min-height: 150px;
+
+  padding: 30px;
+
+  background: #ffffff;
+}
+
+.highlight-card span {
+  color: #ff4d00;
+
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.highlight-card p {
+  margin-top: 25px;
+
+  font-size: 1.05rem;
+
+  line-height: 1.5;
+}
+
+
+/* ================================
+   CLEAN LISTS
+================================ */
+
+.clean-list {
+  margin-top: 35px;
+
+  list-style: none;
+}
+
+.clean-list li {
+  padding: 18px 0;
+
+  border-bottom: 1px solid #ccc;
+
+  font-size: 1.05rem;
+
+  line-height: 1.5;
+}
+
+.clean-list li::before {
+  content: "↗";
+
+  margin-right: 16px;
+
+  color: #ff4d00;
+
+  font-weight: 700;
+}
+
+.team-size {
+  margin-top: 25px;
+
+  font-weight: 700;
+}
+
+
+/* ================================
+   SCHEDULE
+================================ */
+
+.schedule-list {
+  margin-top: 35px;
+}
+
+.schedule-item {
+  padding: 25px 0;
+
+  border-bottom: 1px solid #bbb;
+
+  display: grid;
+
+  grid-template-columns: 1fr 2fr;
+
+  gap: 30px;
+}
+
+.schedule-item strong {
+  font-family: "Space Grotesk", sans-serif;
+
+  font-size: 1.2rem;
+}
+
+.schedule-item p {
+  color: #666;
+
+  line-height: 1.6;
+}
+
+
+/* ================================
+   PRIZES
+================================ */
+
+.prize-section {
+  padding: 60px !important;
+
+  background: #dfff00;
+
+  border: none !important;
+}
+
+.prize-section .eyebrow {
+  color: #111;
+}
+
+.prize-grid {
+  margin-top: 40px;
+
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+.prize-grid div {
+  padding-top: 18px;
+
+  border-top: 2px solid #111;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 15px;
+}
+
+.prize-grid span {
+  font-size: 0.85rem;
+}
+
+.prize-grid strong {
+  font-family: "Space Grotesk", sans-serif;
+
+  font-size: 1.7rem;
+}
+
+
+/* ================================
+   FAQ
+================================ */
+
+.faq-list {
+  margin-top: 35px;
+}
+
+details {
+  padding: 22px 0;
+
+  border-top: 1px solid #bbb;
+}
+
+details:last-child {
+  border-bottom: 1px solid #bbb;
+}
+
+summary {
+  cursor: pointer;
+
+  font-family: "Space Grotesk", sans-serif;
+
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+details p {
+  max-width: 800px;
+
+  padding-top: 18px;
+
+  color: #666;
+
+  line-height: 1.7;
+}
+
+
+/* ================================
+   LOADING / ERROR / EMPTY
+================================ */
+
+.state-page {
+  width: 100%;
+  min-height: 100vh;
+
+  padding: 30px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.state-page h1 {
+  font-family: "Space Grotesk", sans-serif;
+
+  font-size: clamp(2.5rem, 7vw, 5rem);
+
+  letter-spacing: -0.05em;
+}
+
+.state-page h2 {
+  margin-top: 20px;
+}
+
+.state-page > p:not(.eyebrow) {
+  margin: 15px 0 25px;
+
+  color: #666;
+}
+
+.loader {
+  width: 40px;
+  height: 40px;
+
+  border: 3px solid #ccc;
+  border-top-color: #ff4d00;
+
+  border-radius: 50%;
+
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.empty-state {
+  padding: 60px;
+
+  background: #ffffff;
+
+  text-align: center;
+}
+
+.empty-state p {
+  margin-top: 10px;
+
+  color: #777;
+}
+
+
+/* ================================
+   FOOTER
+================================ */
+
+footer {
+  width: 100%;
+  min-height: 190px;
+
+  padding: 50px 6%;
+
+  background: #111;
+  color: #ffffff;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 30px;
+}
+
+footer strong {
+  font-family: "Space Grotesk", sans-serif;
+
+  font-size: clamp(2rem, 5vw, 4rem);
+
+  letter-spacing: -0.06em;
+}
+
+footer p {
+  color: #aaa;
+}
+
+
+/* ================================
+   TABLET
+================================ */
+
+@media (max-width: 900px) {
+
+  .events-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .detail-hero {
+    grid-template-columns: 1fr;
+
+    gap: 40px;
+  }
+
+  .registration-card {
+    max-width: 500px;
+  }
+
+  .prize-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 600px) {
+
+  .navbar {
+    height: 65px;
+
+    padding: 0 20px;
+  }
+
+  .logo {
+    font-size: 1.35rem;
+  }
+
+
+  /* HERO */
+
+  .hero {
+    min-height: 72vh;
+
+    padding: 70px 20px;
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 17vw, 5.5rem);
+
+    line-height: 0.88;
+  }
+
+  .hero-description {
+    margin-top: 30px;
+
+    font-size: 1rem;
+  }
+
+
+  /* EVENTS */
+
+  .events-section {
+    padding: 70px 20px;
+  }
+
+  .section-heading {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 10px;
+  }
+
+  .events-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .event-info > p {
+    min-height: auto;
+  }
+
+
+  /* DETAIL */
+
+  .detail-hero {
+    padding: 60px 20px 40px;
+  }
+
+  .detail-hero h1 {
+    font-size: clamp(3rem, 15vw, 5rem);
+  }
+
+  .registration-card {
+    width: 100%;
+  }
+
+  .banner-wrapper {
+    width: calc(100% - 40px);
+
+    margin-bottom: 60px;
+
+    aspect-ratio: 4 / 3;
+  }
+
+  .detail-content {
+    padding: 0 20px 80px;
+  }
+
+  .detail-content section {
+    padding: 55px 0;
+  }
+
+
+  /* HIGHLIGHTS */
+
+  .highlight-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  /* SCHEDULE */
+
+  .schedule-item {
+    grid-template-columns: 1fr;
+
+    gap: 8px;
+  }
+
+
+  /* PRIZES */
+
+  .prize-section {
+    padding: 35px 25px !important;
+  }
+
+
+  /* FOOTER */
+
+  footer {
+    padding: 40px 20px;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+}
+
+.registration-status-box {
+  width: 100%;
+  margin-top: 20px;
+  padding: 16px 20px;
+
+  background: #dfff00;
+  color: #111;
+
+  text-align: center;
+  font-weight: 700;
+}
+
+.registration-card:has(.registration-status-box) .registration-status-box {
+  letter-spacing: 0.5px;
+}

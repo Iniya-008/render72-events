@@ -1,14 +1,18 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import EventDetail from "./pages/EventDetail";
+
+const EventDetail = lazy(() => import("./pages/EventDetail"));
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/event/:id" element={<EventDetail />} />
-      </Routes>
+      <Suspense fallback={<div style={{ minHeight: "100vh" }} />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/event/:id" element={<EventDetail />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }

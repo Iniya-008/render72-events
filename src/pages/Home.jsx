@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getEvents } from "../services/api";
 
+// Start fetching as soon as this module loads, not after the component mounts
+let initialRequest = getEvents();
+initialRequest.catch(() => {}); // avoid unhandled rejection; real handling is below
+
 function Home() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,7 +16,9 @@ function Home() {
     setError(false);
 
     try {
-      const data = await getEvents();
+      const request = initialRequest || getEvents();
+      initialRequest = null; // retries make a fresh request
+      const data = await request;
 
       // Supports either an array response or { events: [...] }
       const eventList = Array.isArray(data) ? data : data.events || [];
@@ -43,7 +49,6 @@ function Home() {
       </header>
 
       <main>
-        {/* HERO RENDERS IMMEDIATELY */}
         <section className="hero">
           <div className="hero-content">
             <p className="eyebrow">EVENTS • IDEAS • EXPERIENCES</p>
@@ -75,11 +80,18 @@ function Home() {
             {!loading && !error && <p>{events.length} events</p>}
           </div>
 
-          {/* LOADING ONLY INSIDE EVENTS SECTION */}
           {loading ? (
-            <div className="events-loading">
-              <div className="loader"></div>
-              <p>Finding great events...</p>
+            <div className="events-grid" aria-busy="true">
+              {[1, 2, 3].map((n) => (
+                <div className="event-card skeleton" key={n}>
+                  <div className="image-wrapper" />
+                  <div className="event-info">
+                    <div className="skeleton-line short" />
+                    <div className="skeleton-line" />
+                    <div className="skeleton-line" />
+                  </div>
+                </div>
+              ))}
             </div>
           ) : error ? (
             <div className="empty-state">
@@ -109,6 +121,8 @@ function Home() {
                       <img
                         src={event.cover_image_url}
                         alt={event.cover_image_alt || event.name}
+                        width="600"
+                        height="400"
                         loading="lazy"
                         decoding="async"
                       />
